@@ -33,16 +33,21 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
+          aws-region: us-east-1
+
 
       - name: Initialize Terraform
-        run: terraform init
-        working-directory: terraform/ec2  # ✅ Corrected path
+        run: |
+          cd terraform/s3
+          terraform init
+          terraform validate  # Validate Terraform files
 
-      - name: Plan Terraform
-        run: terraform plan
-        working-directory: terraform/ec2  # ✅ Corrected path
+      - name: Terraform Plan
+        run: |
+          cd terraform/s3
+          terraform plan -out=tfplan
 
-      - name: Apply Terraform
-        run: terraform apply -auto-approve
-        working-directory: terraform/ec2  # ✅ Corrected path
+      - name: Terraform Apply
+        run: |
+          cd terraform/s3
+          terraform apply -auto-approve tfplan
