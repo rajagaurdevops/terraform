@@ -45,7 +45,7 @@ jobs:
       - name: Terraform Plan
         run: |
           cd terraform/ec2
-          terraform plan -out=tfplan
+          terraform plan 
 
       - name: Terraform Apply
         run: |
