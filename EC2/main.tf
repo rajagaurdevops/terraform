@@ -5,7 +5,7 @@ provider "aws" {
 # 🚀 1. Create a Key Pair
 resource "aws_key_pair" "my_key" {
   key_name   = "terraform_key"
-  public_key = file("~/.ssh/authorized_keys")  # Ensure you have a valid SSH key here
+  public_key = file("~/.ssh/id_rsa.pub")  # Ensure you have a valid SSH key here
 }
 
 # 🚀 2. Create a Security Group
