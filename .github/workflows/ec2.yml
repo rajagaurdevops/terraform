@@ -28,15 +28,15 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-          cd ec2
+          cd EC2
           terraform init
 
       - name: Apply Terraform
         run: |
-          cd ec2
+          cd EC2
           terraform apply -auto-approve
 
       - name: Fetch EC2 Public IP
         run: |
-          cd ec2
+          cd EC2
           echo "Nginx Server Public IP: $(terraform output nginx_server_ip)"
