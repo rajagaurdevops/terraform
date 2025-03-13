@@ -27,7 +27,9 @@ jobs:
           aws-region: us-east-1  # Change to your AWS region
 
       - name: Initialize Terraform
-        run: terraform init
+        run: |
+          cd EC2
+          terraform init  # ✅ FIXED: Running terraform init in EC2 directory
 
       - name: Terraform Apply
         run: |
@@ -36,4 +38,5 @@ jobs:
 
       - name: Fetch EC2 Public IP
         run: |
+          cd EC2
           echo "Nginx Server Public IP: $(terraform output nginx_server_ip)"
