@@ -29,8 +29,10 @@ jobs:
       - name: Initialize Terraform
         run: terraform init
 
-      - name: Apply Terraform Configuration
-        run: terraform apply -auto-approve
+      - name: Terraform Apply
+        run: |
+          cd EC2
+          terraform apply -auto-approve
 
       - name: Fetch EC2 Public IP
         run: |
