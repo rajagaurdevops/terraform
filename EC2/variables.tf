@@ -11,5 +11,5 @@ variable "instance_type" {
 }
 
 variable "ssh_key" {
-  default = "/home/ubuntu/.ssh/authorized_keys"  # Make sure this key exists
+  default = "./.ssh/authorized_keys"
 }
