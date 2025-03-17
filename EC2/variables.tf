@@ -12,5 +12,5 @@ variable "instance_type" {
 
 variable "ssh_key" {
   description = "Path to SSH public key"
-  default     = "~/.ssh/deployer_key.pub"
+  default     = "/home/ubuntu/.ssh/deployer_key.pub"
 }
