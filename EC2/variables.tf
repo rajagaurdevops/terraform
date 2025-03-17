@@ -11,5 +11,5 @@ variable "instance_type" {
 }
 
 variable "ssh_key" {
-  default = "/home/ubuntu/authorized_keys"
+  default = "/home/ubuntu/.ssh/authorized_keys"
 }
