@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_key_pair" "deployer" {
   key_name   = "deployer-key"
-  public_key = (var.ssh_key)
+  public_key = file(var.ssh_key)
 }
 
 resource "aws_security_group" "nginx_sg" {
