@@ -3,7 +3,7 @@ variable "aws_region" {
 }
 
 variable "ami_id" {
-  default = "ami-0c55b159cbfafe1f0"  # Ubuntu 22.04 LTS (Change if needed)
+  default = "ami-0f9de6e2d2f067fca"  # Ubuntu 22.04 LTS (Change if needed)
 }
 
 variable "instance_type" {
