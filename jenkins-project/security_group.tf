@@ -1,5 +1,5 @@
-resource "aws_security_group" "raja_sg" {
-  name        = "raja-sg"
+resource "aws_security_group" "raja_sg_test" {
+  name        = "raja-sg-test"
   description = "Allow SSH, HTTP, HTTPS"
 
   ingress {
