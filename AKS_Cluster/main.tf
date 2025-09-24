@@ -26,11 +26,13 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     type = "SystemAssigned"
   }
 
+# Default node pool configuration
   default_node_pool {
     name       = "agentpool"
     vm_size    = "Standard_D2_v2"
     node_count = var.node_count
   }
+# Linux node configuration
   linux_profile {
     admin_username = var.username
 
@@ -38,6 +40,8 @@ resource "azurerm_kubernetes_cluster" "k8s" {
       key_data = azapi_resource_action.ssh_public_key_gen.output.publicKey
     }
   }
+
+ # Network configuration for AKS
   network_profile {
     network_plugin    = "kubenet"
     load_balancer_sku = "standard"
