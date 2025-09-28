@@ -6,10 +6,6 @@ on:
     paths:
       - 'aks/**'
       
-  pull_request:
-    branches: [main]
-    paths:
-      - 'aks/**'
   workflow_dispatch:   # Manual trigger support
 
 jobs:
@@ -45,5 +41,4 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve tfplan
