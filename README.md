@@ -1,16 +1,22 @@
-📘 README.md — Deploy AKS with Terraform
-📂 Project Structure
+# 📘 Deploy AKS with Terraform
+
+## 📂 Project Structure
 aks/
-├── main.tf            # Azure resources (RG, VNet, Subnet, ACR, AKS, Role Assignment)
-├── providers.tf       # Terraform + Provider settings
-├── variables.tf       # Input variables
-├── terraform.tfvars   # Environment-specific values
-├── outputs.tf         # Useful outputs (kubeconfig, aks_name, acr_login_server)
-⚙️ Prerequisites
-Terraform v1.0+
-Azure CLI
-kubectl
+├── main.tf # Azure resources (RG, VNet, Subnet, ACR, AKS, Role Assignment)
+├── providers.tf # Terraform + Provider settings
+├── variables.tf # Input variables
+├── terraform.tfvars # Environment-specific values
+├── outputs.tf # Useful outputs (kubeconfig, aks_name, acr_login_server)
+
+---
+
+## ⚙️ Prerequisites
+- Terraform v1.0+  
+- Azure CLI  
+- kubectl  
+
 Authenticate with Azure:
+```bash
 az login
 az account set --subscription "<YOUR_SUBSCRIPTION_ID>"
 🚀 Steps to Deploy
@@ -45,7 +51,7 @@ Login and push an image:
 az acr login --name acraksdemo001
 docker tag myapp:v1 acraksdemo001.azurecr.io/myapp:v1
 docker push acraksdemo001.azurecr.io/myapp:v1
-Now you can use this image inside your AKS cluster deployments.
+अब आप इस image को अपने AKS deployments में use कर सकते हैं।
 🧹 Destroy Resources
 जब resources की ज़रूरत न हो:
 terraform destroy
