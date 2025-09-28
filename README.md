@@ -1,62 +1,67 @@
-# 📘 Deploy AKS with Terraform
+# Azure AKS Deployment using Terraform
 
-## 📂 Project Structure
-aks/
-├── main.tf # Azure resources (RG, VNet, Subnet, ACR, AKS, Role Assignment)
-├── providers.tf # Terraform + Provider settings
-├── variables.tf # Input variables
-├── terraform.tfvars # Environment-specific values
-├── outputs.tf # Useful outputs (kubeconfig, aks_name, acr_login_server)
+यह प्रोजेक्ट Azure Kubernetes Service (AKS) और Azure Container Registry (ACR) को Terraform के जरिए deploy करने के लिए बनाया गया है।  
+
+यहाँ included resources हैं:  
+- Resource Group  
+- Virtual Network & Subnet  
+- Log Analytics Workspace  
+- Azure Container Registry (ACR)  
+- AKS Cluster (RBAC, Managed Identity, Monitoring)  
+- Role Assignment (AKS → ACR)  
 
 ---
 
-## ⚙️ Prerequisites
-- Terraform v1.0+  
-- Azure CLI  
-- kubectl  
+## 🗂 Project Structure
 
-Authenticate with Azure:
+aks/
+├── main.tf # Resource definitions (RG, VNet, Subnet, ACR, AKS)
+├── providers.tf # Terraform provider configuration
+├── variables.tf # Input variables
+├── terraform.tfvars # Environment-specific values
+├── outputs.tf # Outputs (kubeconfig, aks_name, acr_login_server)
+
+
+
+
+---
+
+## ⚙ Prerequisites
+
+- Terraform ≥ 1.0  
+- Azure CLI  
+- Access to an Azure subscription  
+
 ```bash
 az login
-az account set --subscription "<YOUR_SUBSCRIPTION_ID>"
-🚀 Steps to Deploy
+
+
 1. Initialize Terraform
-terraform init
-यह providers download करेगा और backend setup करेगा।
-2. Preview the Plan
-terraform plan -out plan.tfplan
-यह दिखाएगा कि कौन से resources बनेंगे।
-3. Apply Changes
-terraform apply "plan.tfplan"
-यह आपके Azure environment में resources बनाएगा:
-Resource Group
-Virtual Network + Subnet
-Log Analytics Workspace
-Azure Container Registry (ACR)
-AKS Cluster (with optional Spot Node Pool)
-Role Assignment (AKS → ACR pull)
-🔑 Outputs
-Apply के बाद useful outputs देखें:
-terraform output
-Export kubeconfig
+  terraform init
+
+2. Validate Configuration
+  terraform validate
+
+3. Plan Deployment
+  terraform plan -out=tfplan
+
+4. Apply Deployment
+terraform apply "tfplan"
+
+📄 Outputs
+
+kubeconfig
 terraform output kube_config > kubeconfig.yaml
-export KUBECONFIG=./kubeconfig.yaml
-Verify cluster:
+export KUBECONFIG=$(pwd)/kubeconfig.yaml
 kubectl get nodes
-🐳 Working with ACR
-Get the login server:
+
+AKS Name
+terraform output aks_name
+
+ACR Login Server
 terraform output acr_login_server
-# Example: acraksdemo001.azurecr.io
-Login and push an image:
-az acr login --name acraksdemo001
-docker tag myapp:v1 acraksdemo001.azurecr.io/myapp:v1
-docker push acraksdemo001.azurecr.io/myapp:v1
-अब आप इस image को अपने AKS deployments में use कर सकते हैं।
-🧹 Destroy Resources
-जब resources की ज़रूरत न हो:
-terraform destroy
-📌 Notes
-Subnet sizing: Azure CNI में हर Pod को VNet से IP मिलता है → ensure करें कि subnet में पर्याप्त IPs हों।
-ACR name: globally unique और lowercase होना चाहिए।
-Kubernetes version: हमेशा Azure-supported version दें (latest check करें az aks get-versions -l eastus)।
-State file: Production में Terraform state को Azure Storage backend में रखें (remote backend)।
+
+image push
+az acr login --name <ACR_NAME>
+docker build -t <ACR_LOGIN_SERVER>/myapp:v1 .
+docker push <ACR_LOGIN_SERVER>/myapp:v1
