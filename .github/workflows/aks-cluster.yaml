@@ -47,3 +47,20 @@ jobs:
 
       - name: Terraform Apply
         run: terraform apply -auto-approve tfplan
+        
+
+# If you create a service principal in AAD:
+# az ad sp create-for-rbac --name "my-terraform-sp" --role Contributor --scopes /subscriptions/<SUBSCRIPTION_ID>
+# {
+#   "clientId": "xxxxxx",
+#   "clientSecret": "xxxxxx",
+#   "subscriptionId": "xxxxxx",
+#   "tenantId": "xxxxxx",
+#   "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
+#   "resourceManagerEndpointUrl": "https://management.azure.com/",
+#   "activeDirectoryGraphResourceId": "https://graph.windows.net/",
+#   "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
+#   "galleryEndpointUrl": "https://gallery.azure.com/",
+#   "managementEndpointUrl": "https://management.core.windows.net/"
+# }
+# This JSON can be used as AZURE_CREDENTIALS secret in GitHub Actions.
