@@ -12,6 +12,8 @@ jobs:
   terraform:
     runs-on: ubuntu-latest
 
+  # Environment variables for Terraform Azure provider authentication
+  # These are required for Terraform to connect and manage Azure resources
     env:
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
@@ -21,11 +23,14 @@ jobs:
     defaults:
       run:
         working-directory: aks  # Terraform code folder
-
+        
+  # Check out the repository so workflow can access Terraform code
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
+        
+    # Login to Azure CLI using service principal JSON stored in GitHub secret
+    # This is needed if you want to run any Azure CLI commands in the workflow
       - name: Login to Azure
         uses: azure/login@v1
         with:
@@ -49,18 +54,7 @@ jobs:
         run: terraform apply -auto-approve tfplan
         
 
-# If you create a service principal in AAD:
+# Notes for creating service principal in Azure Active Directory:
+# Use this command to create a service principal for Terraform:
 # az ad sp create-for-rbac --name "my-terraform-sp" --role Contributor --scopes /subscriptions/<SUBSCRIPTION_ID>
-# {
-#   "clientId": "xxxxxx",
-#   "clientSecret": "xxxxxx",
-#   "subscriptionId": "xxxxxx",
-#   "tenantId": "xxxxxx",
-#   "activeDirectoryEndpointUrl": "https://login.microsoftonline.com",
-#   "resourceManagerEndpointUrl": "https://management.azure.com/",
-#   "activeDirectoryGraphResourceId": "https://graph.windows.net/",
-#   "sqlManagementEndpointUrl": "https://management.core.windows.net:8443/",
-#   "galleryEndpointUrl": "https://gallery.azure.com/",
-#   "managementEndpointUrl": "https://management.core.windows.net/"
-# }
-# This JSON can be used as AZURE_CREDENTIALS secret in GitHub Actions.
+# The JSON output can be stored as AZURE_CREDENTIALS secret in GitHub Actions.
