@@ -1,0 +1,9 @@
+resource_group_name = "aks-resource-group"
+location            = "East US"
+aks_name            = "my-aks-cluster"
+aks_dns_prefix      = "myaksdns"
+node_count          = 3
+vm_size             = "Standard_DS2_v2"
+kubernetes_version  = "1.29.2"
+acr_name            = "myaksacr123"
+enable_spot         = true
