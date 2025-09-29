@@ -77,24 +77,6 @@ resource "azurerm_kubernetes_cluster" "aks" {
     max_count           = 5
   }
 
-  # Optional spot node pool
-  dynamic "agent_pool_profile" {
-    for_each = var.enable_spot ? [1] : []
-    content {
-      name                = "spotnp"
-      vm_size             = "Standard_DS2_v2"
-      node_count          = 1
-      vnet_subnet_id      = azurerm_subnet.aks_subnet.id
-      type                = "VirtualMachineScaleSets"
-      os_disk_size_gb     = 30
-      enable_auto_scaling = true
-      min_count           = 1
-      max_count           = 2
-      priority            = "Spot"
-      eviction_policy     = "Delete"
-    }
-  }
-
   addon_profile {
     oms_agent {
       enabled                    = true
@@ -109,7 +91,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   tags = {
-    environment = "dev"
+    environment = "playground"
   }
 }
 
