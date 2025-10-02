@@ -12,20 +12,6 @@
 
 ---
 
-## 🗂 Project Structure
-
-aks/
-├── main.tf # Resource definitions (RG, VNet, Subnet, ACR, AKS)
-├── providers.tf # Terraform provider configuration
-├── variables.tf # Input variables
-├── terraform.tfvars # Environment-specific values
-├── outputs.tf # Outputs (kubeconfig, aks_name, acr_login_server)
-
-
-
-
----
-
 ## ⚙ Prerequisites
 
 - Terraform ≥ 1.0  
