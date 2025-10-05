@@ -61,7 +61,6 @@ Before starting, ensure you have the following:
 - Click **Add**, then **Review + create**  
 - Validate and click **Create**
 
- ![AKS Integrations Tab](./azure-portal-kubernetes-integrations.jpg)
 
 ---
 
@@ -72,3 +71,12 @@ Before starting, ensure you have the following:
 - **Local machine:**  
   ```bash
   az aks install-cli
+
+# 🔐 3) Download Cluster Credentials
+Use the following command to download and configure your cluster credentials
+
+```bash
+az aks get-credentials --resource-group myResourceGroup --name myAKSCluster
+```
+
+✅ This command merges your AKS cluster’s credentials into your local `~/.kube/config file`, allowing kubectl to communicate with your cluster.
