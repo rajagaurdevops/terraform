@@ -61,6 +61,8 @@ Before starting, ensure you have the following:
 - Click **Add**, then **Review + create**  
 - Validate and click **Create**
 
+ ![AKS Integrations Tab](./azure-portal-kubernetes-integrations.jpg)
+
 ---
 
 ### 🔹 Step 3: Connecting to the AKS Cluster
