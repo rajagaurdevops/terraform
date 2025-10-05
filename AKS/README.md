@@ -62,7 +62,7 @@ Before starting, ensure you have the following:
 - Validate and click **Create**
 
 <!-- Resized image using HTML -->
-<img src="https://learn.microsoft.com/en-us/azure/aks/learn/media/quick-kubernetes-deploy-portal/create-cluster.png" width="400" alt="Create Kubernetes Cluster (Azure Portal)">
+<img src="https://learn.microsoft.com/en-us/azure/aks/learn/media/quick-kubernetes-deploy-portal/create-cluster.png" width="500" alt="Create Kubernetes Cluster (Azure Portal)">
 
 ---
 
