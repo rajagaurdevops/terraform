@@ -61,8 +61,8 @@ Before starting, ensure you have the following:
 - Click **Add**, then **Review + create**  
 - Validate and click **Create**
 
-![Create Kubernetes Cluster (Azure Portal)](https://learn.microsoft.com/en-us/azure/aks/learn/media/quick-kubernetes-deploy-portal/create-cluster.png)
-
+[![Create Kubernetes Cluster (Azure Portal)](https://learn.microsoft.com/en-us/azure/aks/learn/media/quick-kubernetes-deploy-portal/create-cluster.png)
+](https://learn.microsoft.com/en-us/azure/aks/learn/media/quick-kubernetes-deploy-portal/create-cluster.png)
 ---
 
 ### 🔹 Step 3: Connecting to the AKS Cluster
