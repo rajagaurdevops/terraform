@@ -1,9 +1,8 @@
-resource_group_name = "aks-resource-group"
+resource_group_name = "rg-aks-demo"
 location            = "East US"
-aks_name            = "my-aks-cluster"
-aks_dns_prefix      = "myaksdns"
-node_count          = 3
-vm_size             = "Standard_DS2_v2"
-kubernetes_version  = "1.29.2"
-acr_name            = "myaksacr123"
-enable_spot         = true
+aks_name           = "aks-demo-cluster"
+aks_dns_prefix     = "aksdemo"
+kubernetes_version = "1.27.3"
+node_count         = 3
+vm_size            = "Standard_DS2_v2"
+acr_name           = "acraksdemo"
