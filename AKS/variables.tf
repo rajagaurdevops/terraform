@@ -1,49 +1,43 @@
 variable "resource_group_name" {
+  description = "Name of the Azure Resource Group to create"
   type        = string
-  description = "Name of the resource group"
 }
 
 variable "location" {
+  description = "Azure region/location where resources will be deployed"
   type        = string
-  default     = "East US"
-  description = "Azure region"
+  default     = "East US"  # default value
 }
 
 variable "aks_name" {
-  type        = string
   description = "Name of the AKS cluster"
+  type        = string
 }
 
 variable "aks_dns_prefix" {
-  type        = string
   description = "DNS prefix for the AKS cluster"
-}
-
-variable "node_count" {
-  type        = number
-  default     = 3
-  description = "Number of default nodes"
-}
-
-variable "vm_size" {
   type        = string
-  default     = "Standard_DS2_v2"
-  description = "Size of the virtual machines"
 }
 
 variable "kubernetes_version" {
+  description = "Version of Kubernetes to use for the AKS cluster"
   type        = string
-  default     = "1.29.2" # Update with a valid version
-  description = "AKS Kubernetes version"
+  default     = "1.27.3"  # example version
+}
+
+variable "node_count" {
+  description = "Number of nodes in the default node pool"
+  type        = number
+  default     = 3
+}
+
+variable "vm_size" {
+  description = "VM size for AKS nodes"
+  type        = string
+  default     = "Standard_DS2_v2"
 }
 
 variable "acr_name" {
-  type        = string
   description = "Name of the Azure Container Registry"
-}
-
-variable "enable_spot" {
-  type        = bool
-  default     = false
-  description = "Enable spot node pool"
+  type        = string
 }
