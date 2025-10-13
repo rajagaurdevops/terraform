@@ -54,5 +54,54 @@ You can ask your AWS admin to attach these managed policies to your IAM user or 
 
 ---
 
-## 🧩 Project Structure
+
+## 🚀 Steps to Deploy
+
+Follow the steps below to deploy your EKS cluster using Terraform:
+
+### 1️⃣ Initialize Terraform
+Initialize the working directory that contains your Terraform configuration files.
+
+```bash
+terraform init
+```
+
+## 2️⃣ Validate Configuration
+Check if your Terraform files are syntactically valid and consistent
+```bash
+terraform validate
+```
+
+3️⃣ Review the Execution Plan
+Generate and review the execution plan to see what Terraform will create or modify.
+```bash
+terraform plan -var-file="variables.tfvars"
+```
+
+4️⃣ Apply the Configuration
+Deploy the infrastructure by applying the Terraform configuration
+```bash
+terraform apply -var-file="variables.tfvars" -auto-approve
+```
+
+Terraform will:<br>
+    Create the VPC and networking resources<br>
+    Create IAM roles and attach necessary policies<br>
+    Deploy the EKS cluster<br>
+    Launch the worker node group<br>
+    Configure networking and routing<br>
+
+
+## ✅ Post Deployment
+Once the Terraform deployment completes successfully, configure your kubectl to connect to the new EKS cluster:
+```bash
+aws eks update-kubeconfig --region ap-south-1 --name test-eks-cluster
+```
+
+## Verify the cluster connection and node status
+
+```bash
+kubectl get nodes
+kubectl get pods -A
+```
 
