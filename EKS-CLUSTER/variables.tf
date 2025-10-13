@@ -43,5 +43,5 @@ variable "max_size" {
 # Name of the SSH key pair for accessing worker nodes
 variable "ssh_key_name" {
   description = "SSH Key Pair Name for EC2 Instances"
-  default     = "Eks-keypair"
+  default     = "EKS_KEY"
 }
