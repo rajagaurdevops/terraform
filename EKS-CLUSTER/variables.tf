@@ -1,7 +1,7 @@
 # AWS Region where the EKS cluster will be created
 variable "aws_region" {
   description = "AWS Region for EKS Cluster"
-  default     = "ap-south-1"
+  default     = "us-east-1"
 }
 
 # Name of the EKS cluster
