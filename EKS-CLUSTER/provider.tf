@@ -13,4 +13,5 @@ terraform {
 # AWS Provider configuration
 provider "aws" {
   region = var.aws_region  # Use region from variables.tf
+  profile = "raja-account"  # use this profile account creadential
 }
