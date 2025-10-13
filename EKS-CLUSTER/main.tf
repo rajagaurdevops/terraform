@@ -12,8 +12,6 @@ resource "aws_eks_cluster" "eks_cluster" {
   vpc_config {
     # Subnets where the control plane will communicate with worker nodes
     subnet_ids = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
-    
-    # Optional: Security groups, endpoint access, etc. can also be specified here
   }
 
   # Ensure that IAM role policies are attached before creating the cluster
