@@ -22,7 +22,7 @@ resource "aws_eks_node_group" "eks_node_group" {
   instance_types = [var.node_instance_type]
 
   # Root volume size in GB for each node (default 20 GB)
-  disk_size = 10
+  disk_size = 20
 
   # Kubernetes node labels (used for scheduling pods, monitoring, and grouping nodes)
   # labels = {
