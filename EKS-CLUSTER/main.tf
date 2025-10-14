@@ -2,7 +2,7 @@
 # Create EKS Cluster
 # =============================================
 resource "aws_eks_cluster" "eks_cluster" {
-  name     = var.cluster_name
+  name = var.cluster_name
 
   # IAM Role ARN for the EKS control plane (master nodes)
   # This role allows the EKS cluster to manage AWS resources
@@ -11,8 +11,20 @@ resource "aws_eks_cluster" "eks_cluster" {
   # VPC configuration for the cluster
   vpc_config {
     # Subnets where the control plane will communicate with worker nodes
-    subnet_ids = [aws_subnet.eks_subnet_a.id, aws_subnet.eks_subnet_b.id]
+    subnet_ids = [
+      aws_subnet.eks_subnet_a.id,
+      aws_subnet.eks_subnet_b.id
+    ]
   }
+
+  # Enable Control Plane logs
+  enabled_cluster_log_types = [
+    "api",               # API server logs
+    "audit",             # Security audit logs
+    "authenticator",     # Authentication logs
+    "controllerManager", # Controller manager logs
+    "scheduler"          # Scheduler logs
+  ]
 
   # Ensure that IAM role policies are attached before creating the cluster
   depends_on = [
