@@ -63,3 +63,30 @@ resource "aws_iam_role_policy_attachment" "ec2_container_registry_read_only" {
   role       = aws_iam_role.eks_node_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
 }
+
+
+# {
+#     "Version": "2012-10-17",
+#     "Statement": [
+#         {
+#             "Effect": "Allow",
+#             "Action": [
+#                 "ec2:*",
+#                 "eks:*",
+#                 "iam:CreateRole",
+#                 "iam:AttachRolePolicy",
+#                 "iam:DetachRolePolicy",
+#                 "iam:DeleteRole",
+#                 "iam:PassRole",
+#                 "iam:GetRole",
+#                 "iam:ListRoles",
+#                 "iam:CreateServiceLinkedRole",
+#                 "autoscaling:*",
+#                 "cloudformation:*",
+#                 "logs:*",
+#                 "tag:*"
+#             ],
+#             "Resource": "*"
+#         }
+#     ]
+# }
