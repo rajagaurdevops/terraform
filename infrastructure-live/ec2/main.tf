@@ -1,15 +1,31 @@
+# ----------------------------------------------------
+# Use VPC module from another GitHub repo
+# ----------------------------------------------------
+module "vpc" {
+  source = "git::https://github.com/your-org/terraform-modules.git//vpc?ref=v1.0.0"
 
-provider "aws" {
-  region = var.region
+  vpc_name            = var.vpc_name
+  vpc_cidr            = var.vpc_cidr
+  public_subnet_cidr  = var.public_subnet_cidr
+  private_subnet_cidr = var.private_subnet_cidr
+  availability_zone   = var.availability_zone
+  tags                = var.tags
 }
 
-resource "aws_instance" "myserver" {
-  ami                    = var.ami
-  instance_type          = var.instance_type
-  key_name               = var.key_name  # Ensure this key pair exists in AWS
-  vpc_security_group_ids = var.vpc_security_group_ids 
+# ----------------------------------------------------
+# EC2 Instance in Public Subnet
+# ----------------------------------------------------
+resource "aws_instance" "web_server" {
+  ami                         = var.ami
+  instance_type               = var.instance_type
+  key_name                    = var.key_name
+  subnet_id                   = module.vpc.public_subnet_id
+  associate_public_ip_address  = true
 
-  tags = {
-    Name = "terraformec2"
-  }
+  tags = merge(
+    var.tags,
+    {
+      Name = "web-server-instance"
+    }
+  )
 }
