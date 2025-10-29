@@ -4,6 +4,12 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "profile" {
+  description = "AWS CLI profile name"
+  type        = string
+  default     = "raja-account"
+}
+
 variable "ami" {
   description = "AMI ID"
   type        = string
