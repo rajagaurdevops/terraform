@@ -5,9 +5,10 @@ variable "region" {
 }
 
 variable "profile" {
-  description = "AWS CLI profile name"
+  description = "AWS CLI Profile"
   type        = string
   default     = "raja-account"
+  
 }
 
 variable "ami" {
@@ -22,16 +23,16 @@ variable "instance_type" {
   default     = "t3.micro"
 }
 
-variable "key_name" {
-  description = "Key pair name for EC2"
-  type        = string
-  default     = "hp"
-}
+# variable "key_name" {
+#   description = "Key pair name for EC2"
+#   type        = string
+#   default     = "hp"
+# }
 
 variable "vpc_name" {
   description = "VPC name"
   type        = string
-  default     = "prod-vpc"
+  default     = "dev-vpc"
 }
 
 variable "vpc_cidr" {
@@ -62,7 +63,7 @@ variable "tags" {
   description = "Common tags"
   type        = map(string)
   default = {
-    Environment = "Production"
-    Project     = "InfraDemo"
+    Environment = "Development"
+    Project     = "Test-Demo"
   }
 }
