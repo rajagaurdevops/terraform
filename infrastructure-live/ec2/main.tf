@@ -2,7 +2,7 @@
 # Use VPC module from another GitHub repo
 # ----------------------------------------------------
 module "vpc" {
-  source = source = "git::https://github.com/rajagaurdevops/terraform-modules.git//vic-module?ref=main"
+  source =  "git::https://github.com/rajagaurdevops/terraform-modules.git//vic-module?ref=main"
 
   vpc_name            = var.vpc_name
   vpc_cidr            = var.vpc_cidr
