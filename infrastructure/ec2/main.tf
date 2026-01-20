@@ -21,7 +21,7 @@ data "aws_caller_identity" "current" {}
 resource "aws_instance" "web_server" {
   ami                         = var.ami
   instance_type               = var.instance_type
-  # key_name                    = var.key_name
+  key_name                    = var.key_name
   subnet_id                   = module.vpc.public_subnet_id
   associate_public_ip_address  = true
 
