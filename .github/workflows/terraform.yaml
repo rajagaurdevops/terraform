@@ -42,9 +42,6 @@ concurrency:
   group: terraform-deploy
   cancel-in-progress: false
 
-env:
-  AWS_REGION: "us-east-1"
-
 jobs:
   terraform:
     name: "TF: ${{ matrix.working_dir }}"
