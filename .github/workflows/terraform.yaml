@@ -52,20 +52,19 @@ jobs:
       fail-fast: false # Don't stop other deployments if one fails
       matrix:
         working_dir:
-            - 'Create-Github-repo/**'
-            - 'DAY-1/**'
-            - 'Day-2/**'
-            - 'Jenkins-Project/**'
-            - 'aws-ec2/**'
-            - 'aws-eks-cluster/**'
-            - 'aws-s3/**'
-            - 'aws-vpc-ec2-nginx/**'
-            - 'aws-vpc/**'
-            - 'azure-aks-cluster/**'
-            - 'infrastructure/**'
-            - 'modules/**'
-            - 'pro-static-website/**'
-            - 'tf_backend/**'
+          - 'Create-Github-repo'
+          - 'DAY-1/PROJECT'
+          - 'Day-2/PROJECT-vpc-with-ec2'
+          - 'Jenkins-Project'
+          - 'aws-ec2'
+          - 'aws-eks-cluster'
+          - 'aws-s3'
+          - 'aws-vpc'
+          - 'aws-vpc-ec2-nginx'
+          - 'azure-aks-cluster'
+          - 'infrastructure/ec2'
+          - 'pro-static-website'
+          - 'tf_backend'
 
     defaults:
       run:
