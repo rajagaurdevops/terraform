@@ -25,5 +25,5 @@ variable "key_name" {
 
 variable "vpc_security_group_ids" {
     description = " value of security group"
-    default = ["sg-0be11f9d07ee34fdd"]
+    default = ["sg-057115b3593b03429"]
 }
