@@ -1,0 +1,134 @@
+name: "Terraform CI/CD Pipeline"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Create-Github-repo/**'
+      - 'DAY-1/**'
+      - 'Day-2/**'
+      - 'Jenkins-Project/**'
+      - 'aws-ec2/**'
+      - 'aws-eks-cluster/**'
+      - 'aws-s3/**'
+      - 'aws-vpc-ec2-nginx/**'
+      - 'aws-vpc/**'
+      - 'azure-aks-cluster/**'
+      - 'infrastructure/**'
+      - 'modules/**'
+      - 'pro-static-website/**'
+      - 'tf_backend/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'Create-Github-repo/**'
+      - 'DAY-1/**'
+      - 'Day-2/**'
+      - 'Jenkins-Project/**'
+      - 'aws-ec2/**'
+      - 'aws-eks-cluster/**'
+      - 'aws-s3/**'
+      - 'aws-vpc-ec2-nginx/**'
+      - 'aws-vpc/**'
+      - 'azure-aks-cluster/**'
+      - 'infrastructure/**'
+      - 'modules/**'
+      - 'pro-static-website/**'
+      - 'tf_backend/**'
+
+concurrency:
+  group: terraform-deploy
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: "us-east-1"
+
+jobs:
+  terraform:
+    name: "TF: ${{ matrix.working_dir }}"
+    runs-on: ubuntu-latest
+    
+    # Define a Matrix for all the directories you want to deploy independently
+    strategy:
+      fail-fast: false # Don't stop other deployments if one fails
+      matrix:
+        working_dir:
+            - 'Create-Github-repo/**'
+            - 'DAY-1/**'
+            - 'Day-2/**'
+            - 'Jenkins-Project/**'
+            - 'aws-ec2/**'
+            - 'aws-eks-cluster/**'
+            - 'aws-s3/**'
+            - 'aws-vpc-ec2-nginx/**'
+            - 'aws-vpc/**'
+            - 'azure-aks-cluster/**'
+            - 'infrastructure/**'
+            - 'modules/**'
+            - 'pro-static-website/**'
+            - 'tf_backend/**'
+
+    defaults:
+      run:
+        working-directory: ./${{ matrix.working_dir }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. Detect if THIS specific directory (or shared modules) actually changed
+      - name: Check for changes in this folder
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            changed:
+              - '${{ matrix.working_dir }}/**'
+              - 'modules/**'  # If a shared module changes, it triggers everything!
+
+      # 2. Only proceed with Terraform if files actually changed
+      - name: Setup Terraform
+        if: steps.filter.outputs.changed == 'true'
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.0"
+
+      # - name: Configure AWS Credentials
+      #   if: steps.filter.outputs.changed == 'true'
+      #   uses: aws-actions/configure-aws-credentials@v4
+      #   with:
+      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws-region: ${{ env.AWS_REGION }}
+
+      - name: Terraform Format
+        if: steps.filter.outputs.changed == 'true'
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        if: steps.filter.outputs.changed == 'true'
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        if: steps.filter.outputs.changed == 'true'
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        if: steps.filter.outputs.changed == 'true'
+        id: plan
+        run: terraform plan -no-color -out=tfplan
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.filter.outputs.changed == 'true' && steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: steps.filter.outputs.changed == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve tfplan
