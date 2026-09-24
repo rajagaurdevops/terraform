@@ -59,6 +59,12 @@ variable "availability_zone" {
   default     = "us-east-1a"
 }
 
+variable "key_name" {
+  description = "Key pair name for EC2"
+  type        = string
+  default     = "hp"
+}
+
 variable "tags" {
   description = "Common tags"
   type        = map(string)
