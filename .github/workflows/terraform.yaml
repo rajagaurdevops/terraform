@@ -1,6 +1,5 @@
 name: "Terraform CI/CD Pipeline"
-run-name: ${{ github.event.head_commit.message || github.event.pull_request.title || 'Terraform CI/CD Pipeline' }}
-
+run-name: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'Terraform CI/CD Pipeline' }}
 on:
   push:
     branches:
@@ -38,6 +37,9 @@ on:
       - 'modules/**'
       - 'pro-static-website/**'
       - 'tf_backend/**'
+
+env:
+  AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
 
 concurrency:
   group: terraform-deploy
@@ -98,6 +100,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Terraform Format
         if: steps.filter.outputs.changed == 'true'
