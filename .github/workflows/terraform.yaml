@@ -1,5 +1,6 @@
 name: "Terraform CI/CD Pipeline"
 run-name: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'Terraform CI/CD Pipeline' }}
+
 on:
   push:
     branches:
@@ -38,19 +39,26 @@ on:
       - 'pro-static-website/**'
       - 'tf_backend/**'
 
+# Least-privilege default; bump per-job if you later add PR comments, OIDC, etc.
+permissions:
+  contents: read
+
 env:
   AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
-
-concurrency:
-  group: terraform-deploy
-  cancel-in-progress: false
+  TF_IN_AUTOMATION: "true"
 
 jobs:
   terraform:
     name: "TF: ${{ matrix.working_dir }}"
     runs-on: ubuntu-latest
-    
-    # Define a Matrix for all the directories you want to deploy independently
+
+    # One concurrency group PER DIRECTORY, not one for the whole workflow.
+    # This still serializes two runs that touch the *same* directory (avoids
+    # racing state locks) while letting unrelated directories deploy in parallel.
+    concurrency:
+      group: terraform-${{ matrix.working_dir }}
+      cancel-in-progress: false
+
     strategy:
       fail-fast: false # Don't stop other deployments if one fails
       matrix:
@@ -87,20 +95,15 @@ jobs:
               - '${{ matrix.working_dir }}/**'
               - 'modules/**'  # If a shared module changes, it triggers everything!
 
-      # 2. Only proceed with Terraform if files actually changed
+      # 2. Only proceed with Terraform if files actually changed.
+      # Setup + fmt need no AWS credentials, so they're safe to run even on
+      # PRs from forks (helpful feedback for external contributors).
       - name: Setup Terraform
         if: steps.filter.outputs.changed == 'true'
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.5.0"
-
-      - name: Configure AWS Credentials
-        if: steps.filter.outputs.changed == 'true'
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+          terraform_wrapper: false
 
       - name: Terraform Format
         if: steps.filter.outputs.changed == 'true'
@@ -108,20 +111,39 @@ jobs:
         run: terraform fmt -check
         continue-on-error: true
 
+      # Everything below needs real AWS credentials, which GitHub does NOT
+      # expose to pull_request runs triggered from a fork. Skip cleanly
+      # instead of failing the job for external contributors.
+      - name: Configure AWS Credentials
+        if: >
+          steps.filter.outputs.changed == 'true' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
       - name: Terraform Init
-        if: steps.filter.outputs.changed == 'true'
+        if: >
+          steps.filter.outputs.changed == 'true' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         id: init
-        run: terraform init
+        run: terraform init -input=false
 
       - name: Terraform Validate
-        if: steps.filter.outputs.changed == 'true'
+        if: >
+          steps.filter.outputs.changed == 'true' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         id: validate
         run: terraform validate -no-color
 
       - name: Terraform Plan
-        if: steps.filter.outputs.changed == 'true'
+        if: >
+          steps.filter.outputs.changed == 'true' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         id: plan
-        run: terraform plan -no-color -out=tfplan
+        run: terraform plan -input=false -lock-timeout=300s -no-color -out=tfplan
         continue-on-error: true
 
       - name: Terraform Plan Status
@@ -130,4 +152,4 @@ jobs:
 
       - name: Terraform Apply
         if: steps.filter.outputs.changed == 'true' && github.ref == 'refs/heads/main' && github.event_name == 'push'
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -input=false -lock-timeout=300s -auto-approve tfplan
