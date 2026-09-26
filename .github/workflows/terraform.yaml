@@ -1,5 +1,4 @@
 name: "Terraform CI/CD Pipeline"
-run-name: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'Terraform CI/CD Pipeline' }}
 
 on:
   push:
