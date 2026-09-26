@@ -1,5 +1,4 @@
 name: "Terraform CI/CD Pipeline"
-run-name: ${{ github.event_name == 'pull_request' && github.event.pull_request.title || github.event.head_commit.message || 'Terraform CI/CD Pipeline' }}
 
 on:
   push:
@@ -38,7 +37,27 @@ on:
       - 'modules/**'
       - 'pro-static-website/**'
       - 'tf_backend/**'
-
+  workflow_dispatch:
+    inputs:
+      working_dir:
+        description: 'Terraform working directory to run'
+        required: true
+        default: 'aws-vpc-ec2-nginx'
+        type: choice
+        options:
+          - 'Create-Github-repo'
+          - 'DAY-1/PROJECT'
+          - 'Day-2/PROJECT-vpc-with-ec2'
+          - 'Jenkins-Project'
+          - 'aws-ec2'
+          - 'aws-eks-cluster'
+          - 'aws-s3'
+          - 'aws-vpc'
+          - 'aws-vpc-ec2-nginx'
+          - 'azure-aks-cluster'
+          - 'infrastructure/ec2'
+          - 'pro-static-website'
+          - 'tf_backend'
 # Least-privilege default; bump per-job if you later add PR comments, OIDC, etc.
 permissions:
   contents: read
